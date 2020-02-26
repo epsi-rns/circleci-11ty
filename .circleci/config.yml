@@ -32,7 +32,9 @@ jobs:
             npm install @11ty/eleventy -g
       - run: 
           name: Build Eleventy Site
-          command: eleventy --pathprefix="/circleci-11ty/"
+          command: |
+            npm install
+            eleventy --pathprefix="/circleci-11ty/"
       - add_ssh_keys:
           fingerprints:
             - "af:ff:21:08:af:e3:94:5d:ae:be:9a:d2:00:e4:9d:5e"
