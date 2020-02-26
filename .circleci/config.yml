@@ -4,10 +4,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - build
-         filters:
-            branches:
-              only: master
+      build:
+       filters:
+          branches:
+            only: master
 
 jobs:
   build:
@@ -15,6 +15,8 @@ jobs:
       - image: node:8.10.0
     steps:
       - checkout
+      #- attach_workspace:
+      #    at: public
       - run:
           name: Disable jekyll builds
           command: touch public/.nojekyll
