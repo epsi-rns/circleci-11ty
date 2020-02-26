@@ -1,0 +1,36 @@
+version: 2
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+         filters:
+            branches:
+              only: master
+
+jobs:
+  build:
+    docker:
+      - image: node:8.10.0
+    steps:
+      - checkout
+      - run:
+          name: Disable jekyll builds
+          command: touch public/.nojekyll
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent gh-pages@2.0.1
+            npm install @11ty/eleventy -g
+            git config user.email "ci-build@example.domain"
+            git config user.name "ci-build"
+      - run: 
+          name: Build Eleventy
+          command: eleventy --pathprefix="/circleci-11ty/"
+      - add_ssh_keys:
+          fingerprints:
+            - "af:ff:21:08:af:e3:94:5d:ae:be:9a:d2:00:e4:9d:5e"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: gh-pages --dotfiles --message "[skip ci] Updates" --dist public
