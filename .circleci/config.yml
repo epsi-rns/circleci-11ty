@@ -15,8 +15,6 @@ jobs:
       - image: node:8.10.0
     steps:
       - checkout
-      #- attach_workspace:
-      #    at: public
       - run:
           name: Disable jekyll builds
           command: touch ~/.nojekyll
@@ -26,18 +24,19 @@ jobs:
             git config user.email "ci-build@example.domain"
             git config user.name "ci-build"
       - run:
-          name: Install and configure dependencies
+          name: Install and Configure Dependencies
           command: |
-            npm install -g --silent gh-pages@2.0.1
-            npm install @11ty/eleventy -g
+            npm install -g gh-pages@2.0.1
+            npm install -g @11ty/eleventy
       - run: 
-          name: Build Eleventy Site
-          command: |
-            npm install
-            eleventy --pathprefix="/circleci-11ty/"
+          name: Install Eleventy Site Dependencies
+          command: npm install
+      - run: 
+          name: Generate Eleventy Static Files
+          command: eleventy --pathprefix="/circleci-11ty/"
       - add_ssh_keys:
           fingerprints:
             - "44:96:a5:95:1e:86:90:cf:e6:ef:67:e7:33:23:3b:0f"
       - run:
-          name: Deploy docs to gh-pages branch
+          name: Deploy Static Files to gh-pages Branch
           command: gh-pages --dotfiles --message "[skip ci] Updates" --dist dist
