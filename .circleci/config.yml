@@ -15,14 +15,17 @@ jobs:
       - image: node:8.10.0
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "44:96:a5:95:1e:86:90:cf:e6:ef:67:e7:33:23:3b:0f"
       - run:
           name: Disable jekyll builds
           command: touch ~/.nojekyll
       - run:
           name: Prepare Git Initialization
           command: |
-            git config user.email "ci-build@example.domain"
-            git config user.name "ci-build"
+            git config user.email "someone@somewhere"
+            git config user.name "someone"
       - run:
           name: Install and Configure Dependencies
           command: |
@@ -34,9 +37,6 @@ jobs:
       - run: 
           name: Generate Eleventy Static Files
           command: eleventy --pathprefix="/circleci-11ty/"
-      - add_ssh_keys:
-          fingerprints:
-            - "44:96:a5:95:1e:86:90:cf:e6:ef:67:e7:33:23:3b:0f"
       - run:
           name: Deploy Static Files to gh-pages Branch
           command: gh-pages --dotfiles --message "[skip ci] Updates" --dist dist
