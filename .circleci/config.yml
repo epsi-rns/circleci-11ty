@@ -4,13 +4,13 @@ workflows:
   version: 2
   build:
     jobs:
-      - build:
+      - buildsite:
          filters:
             branches:
               only: master
 
 jobs:
-  build:
+  buildsite:
     docker:
       - image: node:8.10.0
     steps:
@@ -37,6 +37,6 @@ jobs:
       - run: 
           name: Generate Eleventy Static Files
           command: eleventy --pathprefix="/circleci-11ty/"
-      - run:
+      - deploy:
           name: Deploy Static Files to gh-pages Branch
           command: gh-pages --dotfiles --message "[skip ci] Updates" --dist dist
